@@ -217,6 +217,23 @@ export default function HomePage({ groups, address, isMiniPay, onCreateGroup, on
           </div>
         )}
       </div>
+
+      {/* Footer */}
+      <div style={{
+        textAlign: 'center',
+        padding: '20px 16px',
+        borderTop: '1px solid #e2e8f0',
+        marginTop: 20,
+      }}>
+        <div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 6 }}>
+          CeloSplit · Built on Celo
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 16 }}>
+          <a href="/terms.html" style={{ fontSize: 11, color: '#64748b', textDecoration: 'none' }}>Terms of Service</a>
+          <a href="/privacy.html" style={{ fontSize: 11, color: '#64748b', textDecoration: 'none' }}>Privacy Policy</a>
+          <a href="https://t.me/Artem00777" style={{ fontSize: 11, color: '#16a34a', textDecoration: 'none' }}>Support</a>
+        </div>
+      </div>
     </div>
   )
 }

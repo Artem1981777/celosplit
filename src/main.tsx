@@ -1,17 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { WagmiProvider, createConfig, http } from 'wagmi'
-import { celo, celoSepolia } from 'viem/chains'
+import { celoSepolia } from 'viem/chains'
 import { injected } from 'wagmi/connectors'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App'
 import './index.css'
 
 const config = createConfig({
-  chains: [celo, celoSepolia],
+  chains: [celoSepolia],
   connectors: [injected()],
   transports: {
-    [celo.id]: http('https://forno.celo.org'),
     [celoSepolia.id]: http('https://alfajores-forno.celo-testnet.org'),
   },
 })

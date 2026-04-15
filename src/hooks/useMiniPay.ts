@@ -1,27 +1,9 @@
 import { useState, useEffect } from 'react'
-import { createPublicClient, createWalletClient, custom, http, formatEther } from 'viem'
-import { celo } from 'viem/chains'
+import { createWalletClient, custom, http, erc20Abi, formatUnits, parseUnits } from 'viem'
+import { celoSepolia } from 'viem/chains'
+import { createPublicClient } from 'viem'
 
-const USDM_ADDRESS = '0x765DE816845861e75A25fCA122bb6898B8B1282a' as const
-const USDM_ABI = [
-  {
-    name: 'balanceOf',
-    type: 'function',
-    stateMutability: 'view',
-    inputs: [{ name: 'account', type: 'address' }],
-    outputs: [{ name: '', type: 'uint256' }],
-  },
-  {
-    name: 'transfer',
-    type: 'function',
-    stateMutability: 'nonpayable',
-    inputs: [
-      { name: 'to', type: 'address' },
-      { name: 'amount', type: 'uint256' },
-    ],
-    outputs: [{ name: '', type: 'bool' }],
-  },
-] as const
+const USDC_ADDRESS = '0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B' as const
 
 export function useMiniPay() {
   const [address, setAddress] = useState<string>('')
@@ -30,37 +12,49 @@ export function useMiniPay() {
   const [loading, setLoading] = useState(false)
 
   const publicClient = createPublicClient({
-    chain: celo,
-    transport: http('https://forno.celo.org'),
+    chain: celoSepolia,
+    transport: http('https://alfajores-forno.celo-testnet.org'),
   })
 
   useEffect(() => {
     const w = window as any
-    if (w.ethereum?.isMiniPay) {
+    const ethereum = w.ethereum
+    if (ethereum?.isMiniPay || navigator.userAgent.toLowerCase().includes('minipay')) {
       setIsMiniPay(true)
-      init()
+    }
+    if (ethereum) {
+      init(ethereum)
     }
   }, [])
 
-  const init = async () => {
-    const w = window as any
-    const accounts = await w.ethereum.request({ method: 'eth_requestAccounts' })
-    if (accounts[0]) {
-      setAddress(accounts[0])
-      await fetchBalance(accounts[0])
+  const init = async (ethereum: any) => {
+    try {
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+      if (accounts[0]) {
+        setAddress(accounts[0])
+        await fetchBalance(accounts[0])
+      }
+    } catch (e) {
+      console.error('Init error:', e)
     }
   }
 
   const fetchBalance = async (addr: string) => {
     try {
       const bal = await publicClient.readContract({
-        address: USDM_ADDRESS,
-        abi: USDM_ABI,
+        address: USDC_ADDRESS,
+        abi: erc20Abi,
         functionName: 'balanceOf',
         args: [addr as `0x${string}`],
       })
-      setBalance(parseFloat(formatEther(bal as bigint)).toFixed(2))
+      const decimals = await publicClient.readContract({
+        address: USDC_ADDRESS,
+        abi: erc20Abi,
+        functionName: 'decimals',
+      })
+      setBalance(parseFloat(formatUnits(bal as bigint, decimals as number)).toFixed(2))
     } catch (e) {
+      console.error('Balance error:', e)
       setBalance('0')
     }
   }
@@ -70,20 +64,22 @@ export function useMiniPay() {
     try {
       const w = window as any
       const walletClient = createWalletClient({
-        chain: celo,
+        chain: celoSepolia,
         transport: custom(w.ethereum),
       })
       const [from] = await walletClient.getAddresses()
-      const amountWei = BigInt(Math.round(amount * 1e18))
-
+      const decimals = await publicClient.readContract({
+        address: USDC_ADDRESS,
+        abi: erc20Abi,
+        functionName: 'decimals',
+      })
       const hash = await walletClient.writeContract({
-        address: USDM_ADDRESS,
-        abi: USDM_ABI,
+        address: USDC_ADDRESS,
+        abi: erc20Abi,
         functionName: 'transfer',
-        args: [to as `0x${string}`, amountWei],
+        args: [to as `0x${string}`, parseUnits(amount.toString(), decimals as number)],
         account: from,
       })
-
       const receipt = await publicClient.waitForTransactionReceipt({ hash })
       await fetchBalance(from)
       return receipt.status === 'success' ? hash : ''

@@ -83,7 +83,7 @@ export default function AddExpensePage({ group, address, onBack, onUpdateGroup }
         {/* Amount */}
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, color: '#64748b', marginBottom: 6 }}>
-            AMOUNT (USDm)
+            AMOUNT (USDC)
           </div>
           <div style={{ position: 'relative' }}>
             <span style={{
@@ -179,7 +179,7 @@ export default function AddExpensePage({ group, address, onBack, onUpdateGroup }
           }}>
             <div style={{ fontSize: 13, color: '#166534' }}>Each person pays</div>
             <div style={{ fontSize: 24, fontWeight: 700, color: '#16a34a' }}>
-              ${perPerson} USDm
+              ${perPerson} USDC
             </div>
             <div style={{ fontSize: 12, color: '#4ade80' }}>
               {splitBetween.length} people · ${amount} total

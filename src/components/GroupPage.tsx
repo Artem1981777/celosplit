@@ -169,7 +169,7 @@ export default function GroupPage({ group, address, onBack, onAddExpense, onSett
                     fontSize: 14, fontWeight: 700,
                     color: bal > 0 ? '#16a34a' : bal < 0 ? '#ef4444' : '#94a3b8',
                   }}>
-                    {bal > 0 ? '+' : ''}{bal.toFixed(2)} USDm
+                    {bal > 0 ? '+' : ''}{bal.toFixed(2)} USDC
                   </div>
                 </div>
               )

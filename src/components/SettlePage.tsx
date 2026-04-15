@@ -95,7 +95,7 @@ export default function SettlePage({ group, address, isMiniPay, onBack, onUpdate
         </button>
         <div>
           <div style={{ fontSize: 18, fontWeight: 700 }}>Settle Up</div>
-          <div style={{ fontSize: 12, opacity: 0.85 }}>Pay your share in USDm</div>
+          <div style={{ fontSize: 12, opacity: 0.85 }}>Pay your share in USDC</div>
         </div>
       </div>
 
@@ -106,9 +106,9 @@ export default function SettlePage({ group, address, isMiniPay, onBack, onUpdate
           borderRadius: 14, padding: '14px 16px', marginBottom: 20,
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         }}>
-          <div style={{ fontSize: 13, color: '#166534' }}>Your USDm balance</div>
+          <div style={{ fontSize: 13, color: '#166534' }}>Your USDC balance</div>
           <div style={{ fontSize: 18, fontWeight: 700, color: '#16a34a' }}>
-            ${balance} USDm
+            ${balance} USDC
           </div>
         </div>
 
@@ -202,7 +202,7 @@ export default function SettlePage({ group, address, isMiniPay, onBack, onUpdate
                     <Send size={16} />
                     {loading && settling === debt.to
                       ? 'Sending...'
-                      : `Pay $${debt.amount.toFixed(2)} USDm`}
+                      : `Pay $${debt.amount.toFixed(2)} USDC`}
                   </button>
                 )}
               </div>
