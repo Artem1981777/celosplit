@@ -17,8 +17,14 @@ export default function App() {
 
   useEffect(() => {
     const w = window as any
-    if (w.ethereum && w.ethereum.isMiniPay) {
+    const ethereum = w.ethereum || w.web3?.currentProvider
+    const mini = ethereum?.isMiniPay || 
+      navigator.userAgent.includes('MiniPay') ||
+      w.location?.href?.includes('minipay')
+    if (mini || ethereum) {
       setIsMiniPay(true)
+    }
+    if (ethereum) {
       connect({ connector: injected({ target: 'metaMask' }) })
     }
   }, [])
