@@ -1,0 +1,19 @@
+{
+  "app": "CeloSplit",
+  "version": "1.0.0",
+  "origins": [
+    "https://celosplit.vercel.app"
+  ],
+  "external_apis": [
+    "https://alfajores-forno.celo-testnet.org",
+    "https://forno.celo.org"
+  ],
+  "contracts": {
+    "USDC_sepolia": "0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B",
+    "USDC_mainnet": "0xcebA9300f2b948710d2653dD7B07f33A8B32118C",
+    "USDm_mainnet": "0x765DE816845861e75A25fCA122bb6898B8B1282a"
+  },
+  "cdn": [],
+  "analytics": "none",
+  "tracking": "none"
+}
